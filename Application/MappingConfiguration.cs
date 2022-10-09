@@ -1,10 +1,6 @@
 ﻿using Application.Point.AddPoints;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Model;
 
 namespace Application
 {
@@ -12,7 +8,7 @@ namespace Application
     {
         public MappingConfiguration()
         {
-            CreateMap<AddPointsCommand.Command, Domain.Model.Transaction>();
+            CreateMap<AddPointsCommand.Command, Transaction>();
         }
     }
 }

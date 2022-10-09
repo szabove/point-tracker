@@ -2,6 +2,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Domain.Model;
 
 namespace Application.Point.AddPoints
 {
@@ -45,7 +46,7 @@ namespace Application.Point.AddPoints
                 // Check if points is positive
                 if (pointsToProcess > 0)
                 {
-                    await _transactionRepository.Insert(_mapper.Map<Domain.Model.Transaction>(request));
+                    await _transactionRepository.Insert(_mapper.Map<Transaction>(request));
                 }
                 else
                 {
@@ -67,7 +68,7 @@ namespace Application.Point.AddPoints
                         throw new Exception("Insufficient points");
                     }
 
-                    var transactionsToUpdate = new List<Domain.Model.Transaction>();
+                    var transactionsToUpdate = new List<Transaction>();
                     foreach (var transaction in userTransactions.OrderBy(x=>x.TimeStamp))
                     {
                         var result = pointsToProcess += transaction.Points;
