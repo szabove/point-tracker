@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -6,5 +7,11 @@ namespace API.Controllers
     [ApiController]
     public class BaseController : Controller
     {
+        protected readonly IMediator mediator;
+
+        public BaseController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
     }
 }
