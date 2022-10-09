@@ -1,4 +1,6 @@
 ﻿using Application.Point.AddPoints;
+using Application.Point.PointBalance;
+using Application.Point.SpendPoint;
 using Domain.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +18,15 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public Task<string> Spend()
+        public async Task<List<SpentPointsDto>> Spend(SpendPointCommand.Command request, CancellationToken cancellationToken)
         {
-            // TODO Implement Command
-            return Task.FromResult("Points spent");
+            return await mediator.Send(request, cancellationToken);
+        }
+
+        [HttpGet]
+        public async Task<Dictionary<string, int>> GetBalance(GetPointBalanceQuery.Query request, CancellationToken cancellationToken)
+        {
+            return await mediator.Send(request, cancellationToken);
         }
     }
 }
