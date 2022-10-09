@@ -11,7 +11,7 @@ namespace Application.Point.AddPoints
         public class Command: IRequest
         {
             public int UserId { get; set; }
-            public string PayerName { get; set; }
+            public string Payer { get; set; }
             public int Points { get; set; }
             public DateTime TimeStamp { get; set; }
         }
@@ -21,7 +21,7 @@ namespace Application.Point.AddPoints
             public CommandValidator()
             {
                 RuleFor(c => c.UserId).GreaterThan(0);
-                RuleFor(c => c.PayerName).NotEmpty();
+                RuleFor(c => c.Payer).NotEmpty();
                 RuleFor(c => c.Points).NotEmpty().NotEqual(0);
                 RuleFor(c => c.TimeStamp).NotEmpty();
             }
@@ -52,7 +52,7 @@ namespace Application.Point.AddPoints
                 {
                     var userTransactions = await _transactionRepository.GetByExpresssion(
                             x=>x.UserId == request.UserId &&
-                            x.PayerName.Equals(request.PayerName,StringComparison.InvariantCultureIgnoreCase) &&
+                            x.Payer.Equals(request.Payer,StringComparison.InvariantCultureIgnoreCase) &&
                             x.Points != 0
                         );
 
@@ -60,7 +60,7 @@ namespace Application.Point.AddPoints
                     if (!userTransactions.Any())
                     {
                         // TODO write custom exception for this
-                        throw new Exception($"First transaction for {request.PayerName} shouldn't be negative");
+                        throw new Exception($"First transaction for {request.Payer} shouldn't be negative");
                     }
                     if (userTransactions.Sum(x=>x.Points) < pointsToProcess)
                     {
@@ -69,7 +69,8 @@ namespace Application.Point.AddPoints
                     }
 
                     var transactionsToUpdate = new List<Transaction>();
-                    foreach (var transaction in userTransactions.OrderBy(x=>x.TimeStamp))
+                    var orderedTransactionByTimestamp = userTransactions.OrderBy(x => x.TimeStamp);
+                    foreach (var transaction in orderedTransactionByTimestamp)
                     {
                         var result = pointsToProcess += transaction.Points;
                         transaction.Points = result > 0 ? result : 0;

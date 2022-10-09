@@ -10,8 +10,6 @@ namespace API.Controllers
 
         public async Task<List<Transaction>> GetTransactions(GetTransactionsQuery.Query request, CancellationToken cancellationToken)
         {
-            throw new Exception("This is a testing exception");
-
             return await mediator.Send(request, cancellationToken);
         }
     }
